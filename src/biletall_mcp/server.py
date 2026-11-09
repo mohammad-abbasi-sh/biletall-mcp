@@ -27,7 +27,7 @@ own date, airline, airports + IATA codes, times, price). Popular
 routes: the homepage / most-travelled list with from/to slugs and
 prices. Prices are in Turkish Lira (TRY). Read-only; transport
 uses Chrome TLS impersonation; requests are spaced ~0.8s apart.
-Built by Mohammad Abbasi (mohammad-abbasi-sh) — Turkey MCP
+Built by Mohammad Abbasi (mohammad-abbasi-sh) — https://almanibama.ir · https://mabbasi.ir — Turkey MCP
 factory.\
 """
 
