@@ -15,7 +15,7 @@ Add to your MCP client config (stdio):
   "mcpServers": {
     "biletall": {
       "command": "uvx",
-      "args": ["biletall-mcp"]
+      "args": ["biletall-mcp==0.1.0"]
     }
   }
 }
@@ -72,9 +72,9 @@ Note: the two sibling lanes (teknosa.com, hepsiemlak.com) went behind a Cloudfla
 ## Install
 
 ```bash
-uvx biletall-mcp        # run directly (needs uv)
+uvx biletall-mcp==0.1.0        # run directly (needs uv)
 # or
-pip install biletall-mcp
+pip install biletall-mcp==0.1.0
 biletall-mcp    # starts the MCP server on stdio
 ```
 
