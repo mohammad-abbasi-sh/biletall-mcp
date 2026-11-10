@@ -200,7 +200,7 @@ class TestPriceStats(unittest.TestCase):
 
 
 class TestServerToolsRegistered(unittest.TestCase):
-    def test_five_tools(self):
+    def test_tools_registered(self):
         from biletall_mcp.server import mcp
 
         tools = asyncio.run(mcp.list_tools())
@@ -210,6 +210,7 @@ class TestServerToolsRegistered(unittest.TestCase):
             [
                 "biletall_bus_route",
                 "biletall_flight_route",
+                "biletall_health",
                 "biletall_popular_routes",
                 "biletall_price_stats",
                 "biletall_search_locations",
