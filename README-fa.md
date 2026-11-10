@@ -15,7 +15,7 @@ mcp-name: io.github.mohammad-abbasi-sh/biletall-mcp
   "mcpServers": {
     "biletall": {
       "command": "uvx",
-      "args": ["biletall-mcp"]
+      "args": ["biletall-mcp==0.1.0"]
     }
   }
 }
@@ -57,9 +57,9 @@ mcp-name: io.github.mohammad-abbasi-sh/biletall-mcp
 ## نصب
 
 ```bash
-uvx biletall-mcp        # اجرای مستقیم (نیازمند uv)
+uvx biletall-mcp==0.1.0        # اجرای مستقیم (نیازمند uv)
 # یا
-pip install biletall-mcp
+pip install biletall-mcp==0.1.0
 biletall-mcp    # سرور MCP را روی stdio راه می‌اندازد
 ```
 
