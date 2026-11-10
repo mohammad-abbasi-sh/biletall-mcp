@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 
 from mcp.server.fastmcp import FastMCP
 
@@ -32,8 +33,24 @@ factory.\
 """
 
 
+_SOURCE = "biletall.com"
+_DISCLAIMER = "Unofficial read-only data from biletall.com; verify on the site before acting on it."
+
+
+def _envelope() -> dict:
+    return {
+        "fetched_at": datetime.now(timezone.utc).isoformat(),
+        "source": _SOURCE,
+        "disclaimer": _DISCLAIMER,
+    }
+
+
+def _ok(payload: dict) -> str:
+    return json.dumps({**_envelope(), **payload}, ensure_ascii=False)
+
+
 def _err(e: Exception) -> str:
-    return json.dumps({"error": str(e)}, ensure_ascii=False)
+    return _ok({"error": str(e)})
 
 
 def _validate_limit(limit: int, lo: int = 1, hi: int = 30) -> int:
@@ -64,10 +81,7 @@ def biletall_search_locations(query: str, limit: int = 20) -> str:
         rows = _R.search_locations(query.strip(), limit=limit)
     except (ValueError, _http.BiletallError) as e:
         return _err(e)
-    return json.dumps(
-        {"query": query.strip(), "count": len(rows), "locations": rows},
-        ensure_ascii=False,
-    )
+    return _ok({"query": query.strip(), "count": len(rows), "locations": rows})
 
 
 @mcp.tool()
@@ -86,8 +100,7 @@ def biletall_bus_route(from_city: str, to_city: str, limit: int = 10) -> str:
         data = _R.parse_bus_route(html_text, a, b)
     except (ValueError, _http.BiletallError) as e:
         return _err(e)
-    return json.dumps(
-        {
+    return _ok({
             "from_city": from_city,
             "to_city": to_city,
             "from_slug": a,
@@ -96,9 +109,7 @@ def biletall_bus_route(from_city: str, to_city: str, limit: int = 10) -> str:
             "total_listed": len(data["journeys"]),
             "count": min(limit, len(data["journeys"])),
             "journeys": data["journeys"][:limit],
-        },
-        ensure_ascii=False,
-    )
+        })
 
 
 @mcp.tool()
@@ -118,8 +129,7 @@ def biletall_flight_route(from_city: str, to_city: str, limit: int = 10) -> str:
         data = _R.parse_flight_route(html_text, a, b)
     except (ValueError, _http.BiletallError) as e:
         return _err(e)
-    return json.dumps(
-        {
+    return _ok({
             "from_city": from_city,
             "to_city": to_city,
             "from_slug": a,
@@ -128,9 +138,7 @@ def biletall_flight_route(from_city: str, to_city: str, limit: int = 10) -> str:
             "total_listed": len(data["flights"]),
             "count": min(limit, len(data["flights"])),
             "flights": data["flights"][:limit],
-        },
-        ensure_ascii=False,
-    )
+        })
 
 
 @mcp.tool()
@@ -146,17 +154,14 @@ def biletall_price_stats(from_city: str, to_city: str) -> str:
         stats = _R.price_stats(data["journeys"])
     except (ValueError, _http.BiletallError) as e:
         return _err(e)
-    return json.dumps(
-        {
+    return _ok({
             "from_city": from_city,
             "to_city": to_city,
             "from_slug": a,
             "to_slug": b,
             "summary": data["summary"],
             **stats,
-        },
-        ensure_ascii=False,
-    )
+        })
 
 
 @mcp.tool()
@@ -171,10 +176,17 @@ def biletall_popular_routes(limit: int = 15) -> str:
         rows = _R.parse_popular_routes(html_text)
     except (ValueError, _http.BiletallError) as e:
         return _err(e)
-    return json.dumps(
-        {"count": min(limit, len(rows)), "routes": rows[:limit]},
-        ensure_ascii=False,
-    )
+    return _ok({"count": min(limit, len(rows)), "routes": rows[:limit]})
+
+
+@mcp.tool()
+def biletall_health() -> str:
+    """Check whether biletall.com is reachable right now.
+
+    Returns status ok (HTTP 200), blocked (HTTP 403/429 — bot wall or
+    rate limit) or error, plus the HTTP status and the probed URL.
+    One polite request; it does not fetch any listings."""
+    return _ok(_http.health_check())
 
 
 def main() -> None:
