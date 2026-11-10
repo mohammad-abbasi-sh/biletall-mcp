@@ -15,7 +15,7 @@ MCP istemci yapılandırmanıza ekleyin (stdio):
   "mcpServers": {
     "biletall": {
       "command": "uvx",
-      "args": ["biletall-mcp==0.1.0"]
+      "args": ["biletall-mcp==0.1.1"]
     }
   }
 }
@@ -57,9 +57,9 @@ Not: kardeş alanlar (teknosa.com, hepsiemlak.com) bu sunucunun yapıldığı g�
 ## Kurulum
 
 ```bash
-uvx biletall-mcp==0.1.0        # doğrudan çalıştır (uv gerekir)
+uvx biletall-mcp==0.1.1        # doğrudan çalıştır (uv gerekir)
 # veya
-pip install biletall-mcp==0.1.0
+pip install biletall-mcp==0.1.1
 biletall-mcp    # MCP sunucusunu stdio üzerinde başlatır
 ```
 
